@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+int main(){
+    int n,i,time=0,remain;
+    int at[10],bt[10],rt[10],pr[10],ct[10],tat[10],wt[10];
+    float avg_tat=0,avg_wt=0;
+
+    printf("--- Priority Scheduling (Preemptive) ---\n");
+
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++){
+        scanf("%d%d%d",&at[i],&bt[i],&pr[i]);
+        rt[i]=bt[i];
+    }
+
+    remain=n;
+
+    while(remain){
+        int best=-1,high=9999;
+
+        for(i=0;i<n;i++){
+            if(at[i]<=time && rt[i]>0 && pr[i]<high){
+                high=pr[i];
+                best=i;
+            }
+        }
+
+        if(best==-1){
+            time++;
+            continue;
+        }
+
+        rt[best]--;
+        time++;
+
+        if(rt[best]==0){
+            ct[best]=time;
+            remain--;
+        }
+    }
+
+    for(i=0;i<n;i++){
+        tat[i]=ct[i]-at[i];
+        wt[i]=tat[i]-bt[i];
+
+        avg_tat+=tat[i];
+        avg_wt+=wt[i];
+    }
+
+    avg_tat/=n;
+    avg_wt/=n;
+
+    printf("\nProcess AT BT PR CT TAT WT\n");
+    for(i=0;i<n;i++)
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\t%d\n",i+1,at[i],bt[i],pr[i],ct[i],tat[i],wt[i]);
+
+    printf("\nAverage Turnaround Time = %.2f",avg_tat);
+    printf("\nAverage Waiting Time = %.2f",avg_wt);
+}
