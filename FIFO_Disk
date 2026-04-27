@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int req[100], n, head;
+    int total = 0;
+
+    printf("Enter number of requests: ");
+    scanf("%d", &n);
+
+    printf("Enter request queue: ");
+    for(int i = 0; i < n; i++) {
+        scanf("%d", &req[i]);
+    }
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("\nHead Movement:\n");
+
+    // Process requests in given order (FIFO)
+    for(int i = 0; i < n; i++) {
+        printf("%d -> %d\n", head, req[i]);
+        total += abs(head - req[i]);
+        head = req[i];
+    }
+
+    printf("\nTotal Seek Time = %d\n", total);
+    printf("Average Seek Time = %.2f\n", (float)total / n);
+
+    return 0;
+}
