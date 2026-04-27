@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void sort(int arr[],int n){
+    for(int i=0 ;i<n-1;i++){
+        for(int j=0;j<n-i-1;j++){
+            if(arr[j]>arr[j+1]){
+                int temp = arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]= temp;
+            }
+        }
+    }
+}
+int main(){
+    int req[100],n,head,size;
+    int index=0,total=0;
+    
+    printf("Enter total number of requests:");
+    scanf("%d",&n);
+    
+    printf("Enter request queue:");
+    for(int i=0;i<n;i++){
+        scanf("%d",&req[i]);
+    }
+    
+    printf("Enter initial head position:");
+    scanf("%d",&head);
+    
+    printf("Enter size of disk:");
+    scanf("%d",&size);
+    
+    sort(req,n);
+    printf("Head Movement\n");
+    
+    for(int i=0;i<n;i++){
+        if(req[i]>head){
+            index=i;
+            break;
+        }
+    }
+    
+    for(int i=index;i<n;i++){
+        printf("%d -> %d\n",head,req[i]);
+        total+=abs(head-req[i]);
+        head=req[i];
+    }
+    
+    if(index>0){
+        printf("%d -> %d\n",head,req[0]);
+        total+=abs(head-req[0]);
+        head=req[0];
+    }
+    for(int i=1;i<index;i++){
+        printf("%d ->%d\n",head,req[i]);
+        total+=abs(head-req[i]);
+        head=req[i];
+    }
+    
+    printf("\nTotal seek time=%d",total);
+    printf("\nAverage seek time=%.2f",(float)total/n);
+    
+}
