@@ -1,0 +1,73 @@
+#include <stdio.h>
+
+// Function to find replacement index
+int findOptimal(int pages[], int frames[], int n, int index, int f) {
+    int i, j, farthest = index, pos = -1;
+
+    for(i = 0; i < f; i++) {
+        for(j = index; j < n; j++) {
+            if(frames[i] == pages[j]) {
+                if(j > farthest) {
+                    farthest = j;
+                    pos = i;
+                }
+                break;
+            }
+        }
+        if(j == n) return i;
+    }
+
+    if(pos == -1) return 0;
+    else return pos;
+}
+
+int main() {
+    int pages[50], frames[10];
+    int n, f, i, j, k;
+    int page_faults = 0, flag;
+
+    printf("Enter number of pages: ");
+    scanf("%d", &n);
+
+    printf("Enter reference string: ");
+    for(i = 0; i < n; i++) scanf("%d", &pages[i]);
+
+    printf("Enter number of frames (>=3): ");
+    scanf("%d", &f);
+
+    for(i = 0; i < f; i++) frames[i] = -1;
+
+    printf("\nPage\tFrames\t\tStatus\n");
+
+    for(i = 0; i < n; i++) {
+        flag = 0;
+
+        for(j = 0; j < f; j++) {
+            if(frames[j] == pages[i]) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if(flag == 0) {
+            int pos = findOptimal(pages, frames, n, i + 1, f);
+            frames[pos] = pages[i];
+            page_faults++;
+
+            printf("%d\t", pages[i]);
+            for(k = 0; k < f; k++)
+                printf("%d ", frames[k]);
+            printf("\tFault\n");
+        } else {
+            printf("%d\t", pages[i]);
+            for(k = 0; k < f; k++)
+                printf("%d ", frames[k]);
+            printf("\tHit\n");
+        }
+    }
+
+    printf("\nTotal Page Faults = %d\n", page_faults);
+    printf("Total Page Hits = %d\n", n - page_faults);
+
+    return 0;
+}
